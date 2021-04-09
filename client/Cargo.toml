@@ -1,0 +1,15 @@
+[package]
+name = "client"
+version = "0.1.0"
+authors = ["CCBaxter84 <troyceclark@gmail.com>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+futures = { version = "0.3.*" }
+reqwest = "0.11.2"
+serde = { version = "1.0.125", features = ["derive"] }
+serde_json = "1.0.64"
+tokio = { version = "1.4.0", features = ["full"] }
+hyper = "0.14.5"

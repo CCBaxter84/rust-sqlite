@@ -1,0 +1,4 @@
+target
+utxos.sqlite
+client/target
+.env
