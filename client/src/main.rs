@@ -15,11 +15,11 @@ async fn main() {
     let mut done = false;
     while done == false {
         // Get user's BTC wallet address
-        println!("What is your BTC Wallet address?");
+        println!("\nWhat is your BTC Wallet address?\n");
         let address: String = get_wallet();
 
         // Get balance type to query
-        println!("What balance would you like to retrieve?
+        println!("\nWhat balance would you like to retrieve?
             1) Full Balance
             2) Spent Balance
             3) Unspent Balance
@@ -68,15 +68,16 @@ async fn main() {
         }
         // Print Formatted Wallet balance
         let display = get_display(decision);
-        println!("{} BTC Wallet Balance: {}", display, balance);
+        println!("\n{} BTC Wallet Balance: {}", display, balance);
 
         // Ask user if they want to perform another tx
         // If yes, repeat loop; if no, quit program
         set_timeout(Duration::from_secs(2)).await;
-        println!("Would you like to check another balance?
+        println!("\nWould you like to check another balance?
         'Y' or 'N'");
         let result: String = get_final_input();
         done = if result == "y" || result == "yes" { false } else { true };
     }
+    println!("\nGoodbye\n");
 }
 

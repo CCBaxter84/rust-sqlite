@@ -17,7 +17,7 @@ async fn check_result(url: String) -> Result<Balance, String> {
       let balance = serde_json::from_str(&body);
       match balance {
         Ok(res) => Ok(res),
-        Err(_) => Err("No matching wallet".into())
+        Err(_) => Err("\nNo matching wallet".into())
       }
     },
     Err(e) => return Err(e.to_string())
