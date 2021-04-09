@@ -21,12 +21,12 @@ use db::{ connect, get_balance };
 fn fetch_full_balance(address: String) -> Result<Json<Balance>, String> {
     // Connect to DB and query database
     let db_connection = db::connect();
-    let mut statement = match db_connection.prepare("SELECT amount FROM utxos WHERE address = ?;" ) {
+    let statement = match db_connection.prepare("SELECT amount, spent FROM utxos WHERE address = ?;" ) {
             Ok(statement) => statement,
             Err(_) => return Err("Failed to prepare query".into())
     };
     // Return balance
-    get_balance(address, statement)
+    get_balance(address, statement, "full")
 }
 
 // @route   GET /uxos/:address/:spent
@@ -35,15 +35,20 @@ fn fetch_full_balance(address: String) -> Result<Json<Balance>, String> {
 fn fetch_spent_balance(address: String, spent: String) -> Result<Json<Balance>, String> {
     let db_connection = db::connect();
     let is_spent = if spent == "true" { true } else { false };
-    let spent_query = "SELECT amount FROM utxos WHERE address = ? AND spent = true;";
-    let unspent_query = "SELECT amount FROM utxos WHERE address = ? AND spent = false;";
+    let spent_query = "SELECT amount, spent FROM utxos WHERE address = ? AND spent = true;";
+    let unspent_query = "SELECT amount, spent FROM utxos WHERE address = ? AND spent = false;";
 
-    let mut statement = match db_connection.prepare(if is_spent { spent_query } else { unspent_query} ) {
+    let statement = match db_connection.prepare(if is_spent { spent_query } else { unspent_query} ) {
             Ok(statement) => statement,
             Err(_) => return Err("Failed to prepare query".into())
     };
     // Return balance
-    get_balance(address, statement)
+    if is_spent {
+        return get_balance(address, statement, "spent");
+    } else {
+        return get_balance(address, statement, "unspent");
+    }
+
 }
 
 fn main() {

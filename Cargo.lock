@@ -908,6 +908,7 @@ dependencies = [
  "rocket_contrib",
  "rusqlite",
  "serde",
+ "serde_json",
 ]
 
 [[package]]

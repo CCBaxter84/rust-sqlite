@@ -1,9 +1,10 @@
 // Dependencies
 use serde::{ Serialize, Deserialize };
 
-#[derive(Serialize)]
+#[derive(Serialize, Deserialize)]
 pub struct Amount {
-    pub amount: f64
+    pub amount: f64,
+    pub spent: bool
 }
 
 #[derive(Serialize)]

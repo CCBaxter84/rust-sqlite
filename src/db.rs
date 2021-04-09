@@ -10,11 +10,12 @@ pub fn connect() -> Connection {
 }
 
 // Helper function for getting BTC balance
-pub fn get_balance(address: String, mut statement: Statement) -> Result<Json<Balance>, String> {
+pub fn get_balance(address: String, mut statement: Statement, bal_type: &str) -> Result<Json<Balance>, String> {
     // Run provided query for utxos re: provided BTC address & insert results into an Amount struct
     let results = statement.query_map(params![address], |row| {
         Ok(Amount {
-            amount: row.get(0)?
+            amount: row.get(0)?,
+            spent: row.get(1)?
         })
     });
 
@@ -32,7 +33,23 @@ pub fn get_balance(address: String, mut statement: Statement) -> Result<Json<Bal
                   // Iterate over utxos and return sum of balance in json format
                   let mut balance = 0.0;
                   for amount in amounts {
-                      balance += amount.amount;
+                      println!("{:?}", amount.spent);
+                      if bal_type == "full" {
+                        if amount.spent {
+                            balance -= amount.amount;
+                        } else {
+                            balance += amount.amount;
+                        }
+                      } else if bal_type == "spent" {
+                        if amount.spent {
+                            balance += amount.amount;
+                        }
+                      } else if bal_type == "unspent" {
+                        if !amount.spent {
+                            balance += amount.amount;
+                        }
+                      }
+
                   }
                   return Ok(Json(Balance { balance }))
               },
