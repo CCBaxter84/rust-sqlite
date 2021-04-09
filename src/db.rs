@@ -33,7 +33,6 @@ pub fn get_balance(address: String, mut statement: Statement, bal_type: &str) ->
                   // Iterate over utxos and return sum of balance in json format
                   let mut balance = 0.0;
                   for amount in amounts {
-                      println!("{:?}", amount.spent);
                       if bal_type == "full" {
                         if amount.spent {
                             balance -= amount.amount;

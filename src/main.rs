@@ -48,7 +48,6 @@ fn fetch_spent_balance(address: String, spent: String) -> Result<Json<Balance>, 
     } else {
         return get_balance(address, statement, "unspent");
     }
-
 }
 
 fn main() {
